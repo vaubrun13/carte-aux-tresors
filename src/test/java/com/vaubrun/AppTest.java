@@ -13,7 +13,7 @@ class AppTest {
 
     @Test
     @DisplayName("Throw exception when no program parameters")
-    void mainTrowExceptionOnMissingParameters() {
+    public void mainTrowExceptionOnMissingParameters() {
         //Given
         String[] args = new String[0];
         //Then
@@ -24,7 +24,7 @@ class AppTest {
 
     @Test
     @DisplayName("Throw exception when less than 2 parameters are passed")
-    void mainTrowExceptionOnMissingParameter() {
+    public void mainTrowExceptionOnMissingParameter() {
         //Given
         String[] args = new String[1];
         args[0] = "dummy";
@@ -36,7 +36,7 @@ class AppTest {
 
     @Test
     @DisplayName("Throw exception input file is incorrect")
-    void shouldValidateInputFileExists() {
+    public void shouldValidateInputFileExists() {
         //Given
         String inputFilePath = "path/that/does/not/exists";
         String[] args = new String[2];
@@ -50,7 +50,7 @@ class AppTest {
 
     @Test
     @DisplayName("Throw exception when output file already exists")
-    void shouldValidateOutputFileDoentExists() {
+    public void shouldValidateOutputFileDoentExists() {
         //Given
         String inputFilePath = Paths.get("src", "test", "resources", "simple_map.txt").toAbsolutePath().toString();
         String[] args = new String[2];
