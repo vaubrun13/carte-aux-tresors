@@ -1,5 +1,7 @@
 package com.vaubrun.model;
 
+import com.vaubrun.exception.BadMoveException;
+import com.vaubrun.model.landscape.Land;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -58,5 +60,26 @@ public class Adventurer {
 
     public void collectTreasure() {
         this.collectedTreasures++;
+    }
+
+    public void moveForward(Land[][] map) throws BadMoveException {
+        switch (this.getOrientation()) {
+            case NORTH:
+                if (this.y == 0) throw new BadMoveException("Forbidden movement");
+                this.y--;
+                break;
+            case EAST:
+                if (this.x == map[0].length - 1) throw new BadMoveException("Forbidden movement");
+                this.x++;
+                break;
+            case SOUTH:
+                if (this.y == map.length - 1) throw new BadMoveException("Forbidden movement");
+                this.y++;
+                break;
+            case WEST:
+                if (this.x == 0) throw new BadMoveException("Forbidden movement");
+                this.x--;
+                break;
+        }
     }
 }

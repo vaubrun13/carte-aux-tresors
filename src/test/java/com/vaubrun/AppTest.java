@@ -1,6 +1,6 @@
 package com.vaubrun;
 
-import com.vaubrun.exception.BadApplicationParameter;
+import com.vaubrun.exception.BadApplicationParameterException;
 import com.vaubrun.exception.MissingParameterException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -43,7 +43,7 @@ class AppTest {
         args[0] = inputFilePath;
         args[1] = "dummy";
         //Then
-        Assertions.assertThrows(BadApplicationParameter.class, () -> {
+        Assertions.assertThrows(BadApplicationParameterException.class, () -> {
             App.main(args);
         });
     }
@@ -57,7 +57,7 @@ class AppTest {
         args[0] = inputFilePath;
         args[1] = inputFilePath;
         //Then
-        Assertions.assertThrows(BadApplicationParameter.class, () -> {
+        Assertions.assertThrows(BadApplicationParameterException.class, () -> {
             App.main(args);
         });
     }

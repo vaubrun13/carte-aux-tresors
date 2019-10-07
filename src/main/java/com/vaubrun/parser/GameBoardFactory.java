@@ -28,12 +28,12 @@ public abstract class GameBoardFactory {
      * @return the game board described
      * @throws MapCreationException      Failed to initiate the map because of bad parameters in descriptor
      * @throws InputFileFormatException  the map cannot be initiated as required information is missing from descriptor
-     * @throws BadPositionParameter      one of the object to be put onto the map has a position that is not a valid number
-     * @throws InvalidPosition           one of the object to be put onto the map has a position that is not, ex: -2
+     * @throws BadPositionParameterException      one of the object to be put onto the map has a position that is not a valid number
+     * @throws InvalidPositionException           one of the object to be put onto the map has a position that is not, ex: -2
      * @throws BadTreasureCountParameter a land has a treasure count that is not a valid number
      */
     public static GameBoard generateBoardFromFile(List<String> gameDescriptor)
-            throws MapCreationException, InputFileFormatException, BadPositionParameter, BadTreasureCountParameter, InvalidPosition {
+            throws MapCreationException, InputFileFormatException, BadPositionParameterException, BadTreasureCountParameter, InvalidPositionException {
         GameBoard gameBoard = new GameBoard();
 
         //Look for the line that describes the map
@@ -67,7 +67,7 @@ public abstract class GameBoardFactory {
             int y = parsePosition(describedObject, yToParse);
 
             if (x > gameBoard.getMap()[0].length || y > gameBoard.getMap().length) {
-                throw new InvalidPosition(MessageFormat.format("{0} position is outside of map bounds - x: {1} y: {2}", describedObject, x, y));
+                throw new InvalidPositionException(MessageFormat.format("{0} position is outside of map bounds - x: {1} y: {2}", describedObject, x, y));
             }
 
             switch (describedObject) {
@@ -103,19 +103,19 @@ public abstract class GameBoardFactory {
      * @param describedObject
      * @param positionString
      * @return
-     * @throws BadPositionParameter could not parse positionString to a valid number
-     * @throws InvalidPosition      parsed position is less than 0
+     * @throws BadPositionParameterException could not parse positionString to a valid number
+     * @throws InvalidPositionException      parsed position is less than 0
      */
-    public static int parsePosition(ObjectSeparator describedObject, String positionString) throws BadPositionParameter, InvalidPosition {
+    public static int parsePosition(ObjectSeparator describedObject, String positionString) throws BadPositionParameterException, InvalidPositionException {
         int position;
         try {
             position = Integer.parseInt(positionString.trim());
         } catch (NumberFormatException e) {
             log.error(MessageFormat.format("position for {0} is invalid: {1}", describedObject.getValue(), positionString), e);
-            throw new BadPositionParameter(MessageFormat.format("position for {0} is invalid: {1}", describedObject.getValue(), positionString), e);
+            throw new BadPositionParameterException(MessageFormat.format("position for {0} is invalid: {1}", describedObject.getValue(), positionString), e);
         }
         if (position < 0) {
-            throw new InvalidPosition("Position cannot be less than 0");
+            throw new InvalidPositionException("Position cannot be less than 0");
         }
         return position;
     }

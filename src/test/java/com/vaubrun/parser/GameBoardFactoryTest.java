@@ -61,7 +61,7 @@ class GameBoardFactoryTest {
 
     @DisplayName("Should parse input and put mountains on map")
     @Test
-    public void shouldSetMountains() throws MapCreationException, IOException, InputFileFormatException, BadTreasureCountParameter, BadPositionParameter, InvalidPosition {
+    public void shouldSetMountains() throws MapCreationException, IOException, InputFileFormatException, BadTreasureCountParameter, BadPositionParameterException, InvalidPositionException {
         //Given
         List<String> allLines = Files.readAllLines(inputFile, Charset.defaultCharset());
         //When
@@ -73,7 +73,7 @@ class GameBoardFactoryTest {
 
     @DisplayName("Should parse input and put treasures on map")
     @Test
-    public void shouldSetTreasures() throws MapCreationException, IOException, InputFileFormatException, BadTreasureCountParameter, BadPositionParameter, InvalidPosition {
+    public void shouldSetTreasures() throws MapCreationException, IOException, InputFileFormatException, BadTreasureCountParameter, BadPositionParameterException, InvalidPositionException {
         //Given
         List<String> allLines = Files.readAllLines(inputFile);
         //When
@@ -85,7 +85,7 @@ class GameBoardFactoryTest {
 
     @DisplayName("Should parse input and put adventurers on map")
     @Test
-    public void shouldCreateAdventurers() throws MapCreationException, IOException, InputFileFormatException, BadTreasureCountParameter, BadPositionParameter, InvalidPosition {
+    public void shouldCreateAdventurers() throws MapCreationException, IOException, InputFileFormatException, BadTreasureCountParameter, BadPositionParameterException, InvalidPositionException {
         //Given
         List<String> allLines = Files.readAllLines(inputFile);
         //When
@@ -101,7 +101,7 @@ class GameBoardFactoryTest {
         //Given
         String falsyValue = "eeee";
         //Then
-        Assertions.assertThrows(BadPositionParameter.class, () -> {
+        Assertions.assertThrows(BadPositionParameterException.class, () -> {
             GameBoardFactory.parsePosition(ObjectSeparator.TREASURE, falsyValue);
         });
     }
@@ -112,7 +112,7 @@ class GameBoardFactoryTest {
         //Given
         String falsyValue = "-42";
         //Then
-        Assertions.assertThrows(InvalidPosition.class, () -> {
+        Assertions.assertThrows(InvalidPositionException.class, () -> {
             GameBoardFactory.parsePosition(ObjectSeparator.TREASURE, falsyValue);
         });
     }
@@ -125,15 +125,15 @@ class GameBoardFactoryTest {
         description.add("C - 2 - 2");
         description.add("T - 4 - 2 - 1");
         //Then
-        Assertions.assertThrows(InvalidPosition.class, () -> {
+        Assertions.assertThrows(InvalidPositionException.class, () -> {
             GameBoardFactory.generateBoardFromFile(description);
         });
     }
 
     @DisplayName("Should add an adventurer")
     @Test
-    void shouldAddAdventurer() throws MapCreationException, InvalidPosition, BadTreasureCountParameter,
-            BadPositionParameter, InputFileFormatException {
+    void shouldAddAdventurer() throws MapCreationException, InvalidPositionException, BadTreasureCountParameter,
+            BadPositionParameterException, InputFileFormatException {
         Adventurer expectedAdventurer = new Adventurer("wilson", 1, 0, Orientation.SOUTH);
         expectedAdventurer.setMoves("A");
         //Given
