@@ -1,7 +1,7 @@
 package com.vaubrun.board;
 
-import com.vaubrun.board.map.Land;
-import com.vaubrun.board.map.LandType;
+import com.vaubrun.board.landscape.Land;
+import com.vaubrun.board.landscape.LandType;
 import com.vaubrun.exception.InputFileFormatException;
 import com.vaubrun.exception.MapCreationException;
 import com.vaubrun.utils.ExpectedResults;

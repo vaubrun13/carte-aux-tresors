@@ -1,8 +1,8 @@
 package com.vaubrun.utils;
 
-import com.vaubrun.board.map.Land;
-import com.vaubrun.board.map.Meadow;
-import com.vaubrun.board.map.Mountain;
+import com.vaubrun.board.landscape.Land;
+import com.vaubrun.board.landscape.Meadow;
+import com.vaubrun.board.landscape.Mountain;
 
 public abstract class ExpectedResults {
 

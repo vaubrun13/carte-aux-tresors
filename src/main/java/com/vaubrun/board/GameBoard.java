@@ -1,8 +1,8 @@
 package com.vaubrun.board;
 
-import com.vaubrun.board.map.Land;
-import com.vaubrun.board.map.Meadow;
-import com.vaubrun.board.map.Mountain;
+import com.vaubrun.board.landscape.Land;
+import com.vaubrun.board.landscape.Meadow;
+import com.vaubrun.board.landscape.Mountain;
 import com.vaubrun.exception.InputFileFormatException;
 import com.vaubrun.exception.MapCreationException;
 import com.vaubrun.parse.FileSeparator;

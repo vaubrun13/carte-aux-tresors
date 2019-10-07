@@ -1,4 +1,4 @@
-package com.vaubrun.board.map;
+package com.vaubrun.board.landscape;
 
 public class Mountain extends Land {
 
