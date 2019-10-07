@@ -1,9 +1,9 @@
-package com.vaubrun.board;
+package com.vaubrun.model;
 
-import com.vaubrun.board.landscape.Land;
-import com.vaubrun.board.landscape.Meadow;
-import com.vaubrun.board.landscape.Mountain;
 import com.vaubrun.exception.*;
+import com.vaubrun.model.landscape.Land;
+import com.vaubrun.model.landscape.Meadow;
+import com.vaubrun.model.landscape.Mountain;
 import com.vaubrun.parse.ObjectSeparator;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;

@@ -1,4 +1,4 @@
-package com.vaubrun.board.landscape;
+package com.vaubrun.model.landscape;
 
 import lombok.Data;
 

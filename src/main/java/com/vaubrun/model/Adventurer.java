@@ -1,4 +1,4 @@
-package com.vaubrun.board;
+package com.vaubrun.model;
 
 import lombok.AccessLevel;
 import lombok.Data;

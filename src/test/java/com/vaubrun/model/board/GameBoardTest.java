@@ -1,8 +1,11 @@
-package com.vaubrun.board;
+package com.vaubrun.model.board;
 
-import com.vaubrun.board.landscape.Land;
-import com.vaubrun.board.landscape.LandType;
 import com.vaubrun.exception.*;
+import com.vaubrun.model.Adventurer;
+import com.vaubrun.model.GameBoard;
+import com.vaubrun.model.Orientation;
+import com.vaubrun.model.landscape.Land;
+import com.vaubrun.model.landscape.LandType;
 import com.vaubrun.parse.ObjectSeparator;
 import com.vaubrun.utils.ExpectedResults;
 import org.junit.jupiter.api.Assertions;
