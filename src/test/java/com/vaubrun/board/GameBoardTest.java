@@ -2,8 +2,8 @@ package com.vaubrun.board;
 
 import com.vaubrun.board.landscape.Land;
 import com.vaubrun.board.landscape.LandType;
-import com.vaubrun.exception.InputFileFormatException;
-import com.vaubrun.exception.MapCreationException;
+import com.vaubrun.exception.*;
+import com.vaubrun.parse.ObjectSeparator;
 import com.vaubrun.utils.ExpectedResults;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -58,7 +58,7 @@ class GameBoardTest {
 
     @DisplayName("Should parse input and put mountains on map")
     @Test
-    public void shouldSetMountains() throws MapCreationException, IOException, InputFileFormatException {
+    public void shouldSetMountains() throws MapCreationException, IOException, InputFileFormatException, BadTreasureCountParameter, BadPositionParameter, InvalidPosition {
         //Given
         List<String> allLines = Files.readAllLines(inputFile, Charset.defaultCharset());
         //When
@@ -70,7 +70,7 @@ class GameBoardTest {
 
     @DisplayName("Should parse input and put treasures on map")
     @Test
-    public void shouldSetTreasures() throws MapCreationException, IOException, InputFileFormatException {
+    public void shouldSetTreasures() throws MapCreationException, IOException, InputFileFormatException, BadTreasureCountParameter, BadPositionParameter, InvalidPosition {
         //Given
         List<String> allLines = Files.readAllLines(inputFile);
         //When
@@ -78,5 +78,39 @@ class GameBoardTest {
         //Then
         Assertions.assertEquals(2, board.getMap()[3][0].getTreasures());
         Assertions.assertEquals(1, board.getMap()[3][1].getTreasures());
+    }
+
+    @DisplayName("Should parse input and put adventurers on map")
+    @Test
+    public void shouldCreateAdventurers() throws MapCreationException, IOException, InputFileFormatException, BadTreasureCountParameter, BadPositionParameter, InvalidPosition {
+        //Given
+        List<String> allLines = Files.readAllLines(inputFile);
+        //When
+        GameBoard board = GameBoard.generateBoardFromFile(allLines);
+        //Then
+        Assertions.assertEquals(2, board.getMap()[3][0].getTreasures());
+        Assertions.assertEquals(1, board.getMap()[3][1].getTreasures());
+    }
+
+    @DisplayName("Should reject parameter as not a valid number")
+    @Test
+    void shouldRejectNotStringPosition() {
+        //Given
+        String falsyValue = "eeee";
+        //Then
+        Assertions.assertThrows(BadPositionParameter.class, () -> {
+            GameBoard.parsePosition(ObjectSeparator.TREASURE, falsyValue);
+        });
+    }
+
+    @DisplayName("Should reject parameter as not a valid position")
+    @Test
+    void shouldRejectOutOfBounds() {
+        //Given
+        String falsyValue = "-42";
+        //Then
+        Assertions.assertThrows(InvalidPosition.class, () -> {
+            GameBoard.parsePosition(ObjectSeparator.TREASURE, falsyValue);
+        });
     }
 }

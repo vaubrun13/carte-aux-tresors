@@ -3,15 +3,15 @@ package com.vaubrun.board;
 import com.vaubrun.board.landscape.Land;
 import com.vaubrun.board.landscape.Meadow;
 import com.vaubrun.board.landscape.Mountain;
-import com.vaubrun.exception.InputFileFormatException;
-import com.vaubrun.exception.MapCreationException;
-import com.vaubrun.parse.FileSeparator;
+import com.vaubrun.exception.*;
+import com.vaubrun.parse.ObjectSeparator;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,73 +23,87 @@ import java.util.Optional;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameBoard {
     private Land[][] map;
+    private List<Adventurer> adventurers;
 
     private GameBoard(int mapXsize, int mapYsize) {
         this.map = new Land[mapYsize][mapXsize];
+        this.adventurers = new ArrayList<>();
     }
 
     /**
      * Generates a game board according to the information given in gameDescriptor
      *
-     * @param gameDescriptor
+     * @param gameDescriptor String list describing the map and the objects on it
      * @return the game board described
      * @throws MapCreationException     Failed to initiate the map because of bad parameters in descriptor
      * @throws InputFileFormatException the map cannot be initiated as required information is missing from descriptor
+     * @throws BadPositionParameter one of the object to be put onto the map has a position that is not a valid number
+     * @throws InvalidPosition one of the object to be put onto the map has a position that is not, ex: -2
+     * @throws BadTreasureCountParameter a land has a treasure count that is not a valid number
      */
     public static GameBoard generateBoardFromFile(List<String> gameDescriptor)
-            throws MapCreationException, InputFileFormatException {
+            throws MapCreationException, InputFileFormatException, BadPositionParameter, BadTreasureCountParameter, InvalidPosition {
         GameBoard gameBoard = new GameBoard();
 
         //Look for the line that describes the map
         Optional<String> mapDescription = gameDescriptor.stream()
-                .filter(line -> line.startsWith(FileSeparator.MAP.getValue()))
+                .filter(line -> line.startsWith(ObjectSeparator.MAP.getValue()))
                 .findFirst();
 
         String[] info = mapDescription.orElseThrow(() -> new InputFileFormatException("Missing map description"))
-                .split(FileSeparator.INFO_SEPARATOR.getValue());
+                .split(ObjectSeparator.INFO_SEPARATOR.getValue());
         gameBoard.map = createMap(info);
 
         //All other things
-        gameDescriptor.parallelStream()
-                .map(line -> line.split(FileSeparator.INFO_SEPARATOR.getValue()))
-                .forEach(information -> {
-                    FileSeparator describedLand = FileSeparator.fromValue(information[0].trim());
-                    //Validating parameter read from file
-                    int x;
-                    int y;
-                    try {
-                        x = Integer.parseInt(information[1].trim());
-                    } catch (NumberFormatException e) {
-                        log.error(MessageFormat.format("x position for {0} is invalid: {1}", describedLand, information[1]), e);
-                        throw new RuntimeException(MessageFormat.format("x position for {0} is invalid: {1}", describedLand.getValue(), information[1]), e);
-                    }
+        for (String descriptor : gameDescriptor) {
+            String[] objectInformation = descriptor.split(ObjectSeparator.INFO_SEPARATOR.getValue());
+            ObjectSeparator describedObject = ObjectSeparator.fromValue(objectInformation[0].trim());
+            //Validating parameter read from file
+            int x = parsePosition(describedObject, objectInformation[1]);
+            int y = parsePosition(describedObject, objectInformation[2]);
 
+            switch (describedObject) {
+                case MOUNTAIN:
+                    gameBoard.getMap()[y][x] = new Mountain();
+                    break;
+                case TREASURE:
                     try {
-                        y = Integer.parseInt(information[2].trim());
+                        gameBoard.getMap()[y][x].setTreasures(Integer.parseInt(objectInformation[3].trim()));
                     } catch (NumberFormatException e) {
-                        log.error(MessageFormat.format("y position for {0} is invalid: {1}", describedLand, information[2]), e);
-                        throw new RuntimeException(MessageFormat.format("y position for {0} is invalid: {1}", describedLand.getValue(), information[2]), e);
+                        log.error(MessageFormat.format("Invalid treasure count: {0}", objectInformation[3]), e);
+                        throw new BadTreasureCountParameter(MessageFormat.format("Invalid treasure count: {0}", objectInformation[3]), e);
                     }
-
-                    switch (describedLand) {
-                        case MOUNTAIN:
-                            gameBoard.getMap()[y][x] = new Mountain();
-                            break;
-                        case TREASURE:
-                            try {
-                                gameBoard.getMap()[y][x].setTreasures(Integer.parseInt(information[3].trim()));
-                            } catch (NumberFormatException e) {
-                                log.error(MessageFormat.format("Invalid treasure count: {0}", information[3]), e);
-                                throw new RuntimeException(MessageFormat.format("Invalid treasure count: {0}", information[3]), e);
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                });
+                    break;
+                default:
+                    break;
+            }
+        }
 
 
         return gameBoard;
+    }
+
+    /**
+     * Validate a string as a valid position
+     *
+     * @param describedObject
+     * @param positionString
+     * @return
+     * @throws BadPositionParameter could not parse positionString to a valid number
+     * @throws InvalidPosition      parsed position is less than 0
+     */
+    public static int parsePosition(ObjectSeparator describedObject, String positionString) throws BadPositionParameter, InvalidPosition {
+        int position;
+        try {
+            position = Integer.parseInt(positionString.trim());
+        } catch (NumberFormatException e) {
+            log.error(MessageFormat.format("position for {0} is invalid: {1}", describedObject.getValue(), positionString), e);
+            throw new BadPositionParameter(MessageFormat.format("position for {0} is invalid: {1}", describedObject.getValue(), positionString), e);
+        }
+        if (position < 0) {
+            throw new InvalidPosition("Position cannot be less than 0");
+        }
+        return position;
     }
 
     /**
