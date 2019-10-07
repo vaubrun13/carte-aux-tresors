@@ -1,4 +1,4 @@
-package com.vaubrun.parse;
+package com.vaubrun.parser;
 
 
 import java.util.Arrays;

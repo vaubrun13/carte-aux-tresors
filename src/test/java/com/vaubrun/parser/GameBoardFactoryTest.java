@@ -1,4 +1,4 @@
-package com.vaubrun.model.board;
+package com.vaubrun.parser;
 
 import com.vaubrun.exception.*;
 import com.vaubrun.model.Adventurer;
@@ -6,7 +6,6 @@ import com.vaubrun.model.GameBoard;
 import com.vaubrun.model.Orientation;
 import com.vaubrun.model.landscape.Land;
 import com.vaubrun.model.landscape.LandType;
-import com.vaubrun.parse.ObjectSeparator;
 import com.vaubrun.utils.ExpectedResults;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class GameBoardTest {
+class GameBoardFactoryTest {
     private Path inputFile = Paths.get("src", "test", "resources", "simple_map.txt");
     private Land[][] expectedLand = ExpectedResults.getSimpleMap();
 
@@ -32,7 +31,7 @@ class GameBoardTest {
         //Given
         String[] mapInfo = new String[]{"C ", "3", "  4"};
         //When
-        Land[][] map = GameBoard.createMap(mapInfo);
+        Land[][] map = GameBoardFactory.createMap(mapInfo);
         //Then
         Assertions.assertEquals(expectedLand.length, map.length);
         Assertions.assertEquals(expectedLand[0].length, map[0].length);
@@ -45,7 +44,7 @@ class GameBoardTest {
         List<String> emptyInfo = Collections.emptyList();
         //Then
         Assertions.assertThrows(InputFileFormatException.class, () -> {
-            GameBoard.generateBoardFromFile(emptyInfo);
+            GameBoardFactory.generateBoardFromFile(emptyInfo);
         });
     }
 
@@ -56,7 +55,7 @@ class GameBoardTest {
         String[] badInfo = new String[]{"C ", "text", " text"};
         //Then
         Assertions.assertThrows(MapCreationException.class, () -> {
-            GameBoard.createMap(badInfo);
+            GameBoardFactory.createMap(badInfo);
         });
     }
 
@@ -66,7 +65,7 @@ class GameBoardTest {
         //Given
         List<String> allLines = Files.readAllLines(inputFile, Charset.defaultCharset());
         //When
-        GameBoard board = GameBoard.generateBoardFromFile(allLines);
+        GameBoard board = GameBoardFactory.generateBoardFromFile(allLines);
         //Then
         Assertions.assertEquals(LandType.MOUNTAIN, board.getMap()[1][1].getType());
         Assertions.assertEquals(LandType.MOUNTAIN, board.getMap()[2][2].getType());
@@ -78,7 +77,7 @@ class GameBoardTest {
         //Given
         List<String> allLines = Files.readAllLines(inputFile);
         //When
-        GameBoard board = GameBoard.generateBoardFromFile(allLines);
+        GameBoard board = GameBoardFactory.generateBoardFromFile(allLines);
         //Then
         Assertions.assertEquals(2, board.getMap()[3][0].getTreasures());
         Assertions.assertEquals(1, board.getMap()[3][1].getTreasures());
@@ -90,7 +89,7 @@ class GameBoardTest {
         //Given
         List<String> allLines = Files.readAllLines(inputFile);
         //When
-        GameBoard board = GameBoard.generateBoardFromFile(allLines);
+        GameBoard board = GameBoardFactory.generateBoardFromFile(allLines);
         //Then
         Assertions.assertEquals(2, board.getMap()[3][0].getTreasures());
         Assertions.assertEquals(1, board.getMap()[3][1].getTreasures());
@@ -103,7 +102,7 @@ class GameBoardTest {
         String falsyValue = "eeee";
         //Then
         Assertions.assertThrows(BadPositionParameter.class, () -> {
-            GameBoard.parsePosition(ObjectSeparator.TREASURE, falsyValue);
+            GameBoardFactory.parsePosition(ObjectSeparator.TREASURE, falsyValue);
         });
     }
 
@@ -114,7 +113,7 @@ class GameBoardTest {
         String falsyValue = "-42";
         //Then
         Assertions.assertThrows(InvalidPosition.class, () -> {
-            GameBoard.parsePosition(ObjectSeparator.TREASURE, falsyValue);
+            GameBoardFactory.parsePosition(ObjectSeparator.TREASURE, falsyValue);
         });
     }
 
@@ -127,7 +126,7 @@ class GameBoardTest {
         description.add("T - 4 - 2 - 1");
         //Then
         Assertions.assertThrows(InvalidPosition.class, () -> {
-            GameBoard.generateBoardFromFile(description);
+            GameBoardFactory.generateBoardFromFile(description);
         });
     }
 
@@ -142,7 +141,7 @@ class GameBoardTest {
         description.add("C - 2 - 2");
         description.add("A - wilson - 1 - 0 - S - A");
         //When
-        GameBoard gameBoard = GameBoard.generateBoardFromFile(description);
+        GameBoard gameBoard = GameBoardFactory.generateBoardFromFile(description);
         //Then
         Assertions.assertEquals(1, gameBoard.getAdventurers().size());
         Assertions.assertEquals(expectedAdventurer, gameBoard.getAdventurers().get(0));
