@@ -1,11 +1,9 @@
 package com.vaubrun.board;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Setter;
 
-@AllArgsConstructor
 @Data
 public class Adventurer {
     private String name;
@@ -14,6 +12,15 @@ public class Adventurer {
     private Orientation orientation;
     @Setter(value = AccessLevel.PRIVATE)
     private int collectedTreasures;
+    private String moves;
+
+    public Adventurer(String name, int x, int y, Orientation orientation) {
+        this.name = name;
+        this.x = x;
+        this.y = y;
+        this.orientation = orientation;
+        this.collectedTreasures = 0;
+    }
 
     public void turnLeft() {
         switch (this.getOrientation()) {

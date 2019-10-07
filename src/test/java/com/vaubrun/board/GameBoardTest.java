@@ -14,6 +14,7 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -112,5 +113,35 @@ class GameBoardTest {
         Assertions.assertThrows(InvalidPosition.class, () -> {
             GameBoard.parsePosition(ObjectSeparator.TREASURE, falsyValue);
         });
+    }
+
+    @DisplayName("Should reject position as out of map bounds")
+    @Test
+    void shouldRejectOutOfMapBounds() {
+        //Given
+        List<String> description = new ArrayList<>();
+        description.add("C - 2 - 2");
+        description.add("T - 4 - 2 - 1");
+        //Then
+        Assertions.assertThrows(InvalidPosition.class, () -> {
+            GameBoard.generateBoardFromFile(description);
+        });
+    }
+
+    @DisplayName("Should add an adventurer")
+    @Test
+    void shouldAddAdventurer() throws MapCreationException, InvalidPosition, BadTreasureCountParameter,
+            BadPositionParameter, InputFileFormatException {
+        Adventurer expectedAdventurer = new Adventurer("wilson", 1, 0, Orientation.SOUTH);
+        expectedAdventurer.setMoves("A");
+        //Given
+        List<String> description = new ArrayList<>();
+        description.add("C - 2 - 2");
+        description.add("A - wilson - 1 - 0 - S - A");
+        //When
+        GameBoard gameBoard = GameBoard.generateBoardFromFile(description);
+        //Then
+        Assertions.assertEquals(1, gameBoard.getAdventurers().size());
+        Assertions.assertEquals(expectedAdventurer, gameBoard.getAdventurers().get(0));
     }
 }

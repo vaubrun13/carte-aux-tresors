@@ -9,7 +9,7 @@ class AdventurerTest {
     @Test
     void testTurnLeft() {
         //Given
-        Adventurer adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.EAST, 0);
+        Adventurer adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.EAST);
         //When
         adventurer.turnLeft();
         //Then
@@ -20,7 +20,7 @@ class AdventurerTest {
     @Test
     void testTurnRight() {
         //Given
-        Adventurer adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.WEST, 0);
+        Adventurer adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.WEST);
         //When
         adventurer.turnRight();
         //Then
@@ -31,7 +31,7 @@ class AdventurerTest {
     @Test
     void collectTreasure() {
         //Given
-        Adventurer adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.WEST, 0);
+        Adventurer adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.WEST);
         //When
         adventurer.collectTreasure();
         adventurer.collectTreasure();

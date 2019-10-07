@@ -5,9 +5,7 @@ import com.vaubrun.board.landscape.Meadow;
 import com.vaubrun.board.landscape.Mountain;
 import com.vaubrun.exception.*;
 import com.vaubrun.parse.ObjectSeparator;
-import lombok.AccessLevel;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import java.text.MessageFormat;
@@ -20,10 +18,13 @@ import java.util.Optional;
  */
 @Log4j2
 @Data
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class GameBoard {
     private Land[][] map;
     private List<Adventurer> adventurers;
+
+    public GameBoard() {
+        this.adventurers = new ArrayList<>();
+    }
 
     private GameBoard(int mapXsize, int mapYsize) {
         this.map = new Land[mapYsize][mapXsize];
@@ -35,10 +36,10 @@ public class GameBoard {
      *
      * @param gameDescriptor String list describing the map and the objects on it
      * @return the game board described
-     * @throws MapCreationException     Failed to initiate the map because of bad parameters in descriptor
-     * @throws InputFileFormatException the map cannot be initiated as required information is missing from descriptor
-     * @throws BadPositionParameter one of the object to be put onto the map has a position that is not a valid number
-     * @throws InvalidPosition one of the object to be put onto the map has a position that is not, ex: -2
+     * @throws MapCreationException      Failed to initiate the map because of bad parameters in descriptor
+     * @throws InputFileFormatException  the map cannot be initiated as required information is missing from descriptor
+     * @throws BadPositionParameter      one of the object to be put onto the map has a position that is not a valid number
+     * @throws InvalidPosition           one of the object to be put onto the map has a position that is not, ex: -2
      * @throws BadTreasureCountParameter a land has a treasure count that is not a valid number
      */
     public static GameBoard generateBoardFromFile(List<String> gameDescriptor)
@@ -56,11 +57,28 @@ public class GameBoard {
 
         //All other things
         for (String descriptor : gameDescriptor) {
+            //Skipping the line if descriptor is a comment
+            if (descriptor.startsWith(ObjectSeparator.COMMENT.getValue())) continue;
+
             String[] objectInformation = descriptor.split(ObjectSeparator.INFO_SEPARATOR.getValue());
             ObjectSeparator describedObject = ObjectSeparator.fromValue(objectInformation[0].trim());
+
+            String xToParse;
+            String yToParse;
+            if (describedObject.equals(ObjectSeparator.ADVENTURER)) {
+                xToParse = objectInformation[2];
+                yToParse = objectInformation[3];
+            } else {
+                xToParse = objectInformation[1];
+                yToParse = objectInformation[2];
+            }
             //Validating parameter read from file
-            int x = parsePosition(describedObject, objectInformation[1]);
-            int y = parsePosition(describedObject, objectInformation[2]);
+            int x = parsePosition(describedObject, xToParse);
+            int y = parsePosition(describedObject, yToParse);
+
+            if (x > gameBoard.getMap()[0].length || y > gameBoard.getMap().length) {
+                throw new InvalidPosition(MessageFormat.format("{0} position is outside of map bounds - x: {1} y: {2}", describedObject, x, y));
+            }
 
             switch (describedObject) {
                 case MOUNTAIN:
@@ -73,6 +91,12 @@ public class GameBoard {
                         log.error(MessageFormat.format("Invalid treasure count: {0}", objectInformation[3]), e);
                         throw new BadTreasureCountParameter(MessageFormat.format("Invalid treasure count: {0}", objectInformation[3]), e);
                     }
+                    break;
+                case ADVENTURER:
+                    Orientation orientation = Orientation.fromValue(objectInformation[4].trim());
+                    Adventurer adventurer = new Adventurer(objectInformation[1].trim(), x, y, orientation);
+                    adventurer.setMoves(objectInformation[5].trim());
+                    gameBoard.getAdventurers().add(adventurer);
                     break;
                 default:
                     break;

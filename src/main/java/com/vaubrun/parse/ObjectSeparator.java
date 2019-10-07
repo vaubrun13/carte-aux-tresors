@@ -4,7 +4,7 @@ package com.vaubrun.parse;
 import java.util.Arrays;
 
 public enum ObjectSeparator {
-    MAP("C"), MOUNTAIN("M"), TREASURE("T"), ADVENTURER("A"), INFO_SEPARATOR("-");
+    MAP("C"), MOUNTAIN("M"), TREASURE("T"), ADVENTURER("A"), INFO_SEPARATOR("-"), COMMENT("#");
 
     private String value;
 
