@@ -43,7 +43,7 @@ class AdventurerTest {
 
     @DisplayName("Should move forward")
     @Test
-    void shoudlMoveForward() throws BadMoveException {
+    void shouldMoveForward() throws BadMoveException {
         //Given
         Adventurer adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.WEST);
         Land[][] map = new Land[3][4];
@@ -51,11 +51,32 @@ class AdventurerTest {
         adventurer.moveForward(map);
         //Then
         Assertions.assertEquals(0, adventurer.getX());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.SOUTH);
+        //When
+        adventurer.moveForward(map);
+        //Then
+        Assertions.assertEquals(2, adventurer.getY());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.EAST);
+        //When
+        adventurer.moveForward(map);
+        //Then
+        Assertions.assertEquals(2, adventurer.getX());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.NORTH);
+        //When
+        adventurer.moveForward(map);
+        //Then
+        Assertions.assertEquals(0, adventurer.getY());
     }
 
     @DisplayName("Should not move forward out of bounds")
     @Test
-    void shouldMoveForward() throws BadMoveException {
+    void shouldNotMoveForward() throws BadMoveException {
         //Given
         Adventurer adventurer = new Adventurer("jack sparrow", 0, 1, Orientation.WEST);
         Land[][] map = new Land[3][4];
