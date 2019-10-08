@@ -14,9 +14,7 @@ public enum ObjectSeparator {
 
     public static ObjectSeparator fromValue(String val) {
         return Arrays.stream(ObjectSeparator.values())
-                //Weird workaround as it seems to have a charset issue, some string comparison are failing but
-                //they should not
-                .filter(objectSeparator -> objectSeparator.value.equals(String.valueOf(val.charAt(0))))
+                .filter(objectSeparator -> objectSeparator.value.equals(val))
                 .findFirst()
                 .orElseThrow(() -> new EnumConstantNotPresentException(ObjectSeparator.class, val));
     }

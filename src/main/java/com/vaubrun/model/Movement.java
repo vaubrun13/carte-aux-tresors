@@ -13,8 +13,6 @@ public enum Movement {
 
     public static Movement fromValue(String val) {
         return Arrays.stream(Movement.values())
-                //Weird workaround as it seems to have a charset issue, some string comparison are failing but
-                //they should not
                 .filter(objectSeparator -> objectSeparator.value.equals(val))
                 .findFirst()
                 .orElseThrow(() -> new EnumConstantNotPresentException(Movement.class, val));

@@ -226,4 +226,22 @@ class AdventurerTest {
 
     }
 
+    @DisplayName("Should collect treasures")
+    @Test
+    void shouldcollectTreasures() throws BadMoveException, CannotClimbMountainException, LandAlreadyOccupiedException {
+        //Given
+        Land[][] map = ExpectedResultsAndMocks.getSimpleMap();
+        Adventurer jack = new Adventurer("jack sparrow", 0, 2, Orientation.SOUTH);
+        Adventurer lara = new Adventurer("lara croft", 0, 0, Orientation.SOUTH);
+        map[jack.getY()][jack.getX()].setAdventurer(jack);
+        map[lara.getY()][lara.getX()].setAdventurer(lara);
+        //When
+        jack.move(Movement.MOVE_FORWARD, map);
+        //Then
+        Assertions.assertEquals(1, jack.getCollectedTreasures());
+        Assertions.assertEquals(1, map[jack.getY()][jack.getX()].getTreasures());
+
+
+    }
+
 }

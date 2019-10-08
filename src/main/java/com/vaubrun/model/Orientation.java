@@ -13,9 +13,7 @@ public enum Orientation {
 
     public static Orientation fromValue(String val) {
         return Arrays.stream(Orientation.values())
-                //Weird workaround as it seems to have a charset issue, some string comparison are failing but
-                //they should not
-                .filter(orientation -> orientation.value.equals(String.valueOf(val.charAt(0))))
+                .filter(orientation -> orientation.value.equals(val))
                 .findFirst()
                 .orElseThrow(() -> new EnumConstantNotPresentException(Orientation.class, val));
     }

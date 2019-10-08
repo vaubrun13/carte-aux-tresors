@@ -36,7 +36,7 @@ public abstract class ExpectedResultsAndMocks {
         output.add("# {T comme Trésor} - {Axe horizontal} - {Axe vertical} - {Nb. de trésors restants}");
         output.add("T - 0 - 3 - 2");
         output.add("T - 1 - 3 - 1");
-        output.add("# {A comme Aventurier} - {Nom de l’aventurier} - {Axe horizontal} - {Axe vertical} - {Orientation} - {Nb. trésors ramassés} ");
+        output.add("# {A comme Aventurier} - {Nom de l’aventurier} - {Axe horizontal} - {Axe vertical} - {Orientation} - {Nb. trésors ramassés}");
         output.add("A - jack sparrow - 1 - 2 - E - 2");
         output.add("A - lara croft - 0 - 2 - O - 1");
         return output;

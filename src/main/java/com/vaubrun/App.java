@@ -1,15 +1,22 @@
 package com.vaubrun;
 
-import com.vaubrun.exception.BadApplicationParameterException;
-import com.vaubrun.exception.MissingParameterException;
+import com.vaubrun.exception.*;
+import com.vaubrun.model.GameBoard;
+import com.vaubrun.parser.GameBoardFactory;
 import lombok.extern.log4j.Log4j2;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.text.MessageFormat;
+import java.util.List;
 
 @Log4j2
 public class App {
-    public static void main(String[] args) throws MissingParameterException, BadApplicationParameterException {
+    public static void main(String[] args) throws MissingParameterException, BadApplicationParameterException,
+            IOException, MapCreationException, BadTreasureCountParameter, InvalidPositionException,
+            BadPositionParameterException, InputFileFormatException {
         if (args.length < 2) {
             throw new MissingParameterException("Parameters for input and/or output files are missing, expecting 2 parameters");
         }
@@ -23,6 +30,12 @@ public class App {
         if (outputFile.exists()) {
             throw new BadApplicationParameterException(MessageFormat.format("Output file already exists: {0}", outputFile.getAbsolutePath()));
         }
+        List<String> descriptors = Files.readAllLines(inputFile.toPath(), Charset.defaultCharset());
+        GameBoard gameBoard = GameBoardFactory.generateBoardFromFile(descriptors);
+
+        gameBoard.makeAdventurerMove();
+
+
         log.info("Running");
     }
 }

@@ -106,11 +106,15 @@ public class Adventurer {
             throw new CannotClimbMountainException(MessageFormat.format("Adventurer {0} could not move forward onto a mountain", this.getName()));
         } else if (map[nextY][nextX].getAdventurer() != null) {
             throw new LandAlreadyOccupiedException(MessageFormat.format("Adventurer {0} could not move forward as land is already occupied", this.getName()));
-        } else {
-            map[y][x].setAdventurer(null);
+        } else { //Performing move
+            map[y][x].setAdventurer(null); //Freeing previous land
             this.setX(nextX);
             this.setY(nextY);
-            map[y][x].setAdventurer(this);
+            map[y][x].setAdventurer(this); //Setting new land as occupied
+            if (map[y][x].getTreasures() > 0) { //Collection treasures
+                this.collectTreasure();
+                map[y][x].setTreasures(map[y][x].getTreasures() - 1);
+            }
         }
 
     }

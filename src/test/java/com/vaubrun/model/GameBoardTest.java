@@ -1,16 +1,23 @@
 package com.vaubrun.model;
 
+import com.vaubrun.exception.*;
 import com.vaubrun.model.landscape.Land;
+import com.vaubrun.parser.GameBoardFactory;
 import com.vaubrun.utils.ExpectedResultsAndMocks;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 class GameBoardTest {
 
-    @DisplayName("Should generate proper output")
+    @DisplayName("Should generate output")
     @Test
     void generateOutput() {
         //Given
@@ -31,5 +38,21 @@ class GameBoardTest {
         List<String> out = board.generateOutput();
         //Then
         Assertions.assertEquals(ExpectedResultsAndMocks.getExpectedOutput(), out);
+    }
+
+    @DisplayName("Should play the move for one adventurer")
+    @Test
+    void shouldMoveOneAdventurer() throws IOException, MapCreationException, BadTreasureCountParameter, InvalidPositionException, BadPositionParameterException, InputFileFormatException {
+        //Given
+        Path inputFile = Paths.get("src", "test", "resources", "example.txt");
+        List<String> allLines = Files.readAllLines(inputFile, Charset.defaultCharset());
+        GameBoard gameBoard = GameBoardFactory.generateBoardFromFile(allLines);
+        //When
+        gameBoard.makeAdventurerMove();
+        List<String> out = gameBoard.generateOutput();
+        //Then
+        Path resultFile = Paths.get("src", "test", "resources", "example_result.txt");
+        List<String> expectedResult = Files.readAllLines(resultFile, Charset.defaultCharset());
+        Assertions.assertEquals(expectedResult, out);
     }
 }
