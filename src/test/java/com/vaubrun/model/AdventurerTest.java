@@ -4,7 +4,7 @@ import com.vaubrun.exception.BadMoveException;
 import com.vaubrun.exception.CannotClimbMountainException;
 import com.vaubrun.model.landscape.Land;
 import com.vaubrun.model.landscape.Mountain;
-import com.vaubrun.utils.ExpectedResults;
+import com.vaubrun.utils.ExpectedResultsAndMocks;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -91,7 +91,7 @@ class AdventurerTest {
     void shouldMoveForward() throws BadMoveException, CannotClimbMountainException {
         //Given
         Adventurer adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.WEST);
-        Land[][] map = ExpectedResults.getSimpleMap();
+        Land[][] map = ExpectedResultsAndMocks.getSimpleMap();
         //When
         adventurer.moveForward(map);
         //Then
@@ -152,7 +152,7 @@ class AdventurerTest {
     void shouldMove() throws BadMoveException, CannotClimbMountainException {
         //Given
         Adventurer adventurer = new Adventurer("jack sparrow", 1, 2, Orientation.EAST);
-        Land[][] map = ExpectedResults.mockForMove();
+        Land[][] map = ExpectedResultsAndMocks.mockForMove();
         //When
         adventurer.move(Movement.TURN_RIGHT, map);
         //Then

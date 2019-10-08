@@ -4,6 +4,7 @@ import com.vaubrun.exception.BadMoveException;
 import com.vaubrun.exception.CannotClimbMountainException;
 import com.vaubrun.model.landscape.Land;
 import com.vaubrun.model.landscape.LandType;
+import com.vaubrun.parser.ObjectSeparator;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -127,5 +128,10 @@ public class Adventurer {
             case MOVE_FORWARD:
                 this.moveForward(map);
         }
+    }
+
+    public String generateOutput() {
+        return MessageFormat.format("{0} - {1} - {2} - {3} - {4} - {5}", ObjectSeparator.ADVENTURER.getValue(), this.getName(),
+                this.getX(), this.getY(), this.getOrientation().getValue(), this.getCollectedTreasures());
     }
 }

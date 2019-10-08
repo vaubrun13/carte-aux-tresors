@@ -7,7 +7,7 @@ import com.vaubrun.model.Movement;
 import com.vaubrun.model.Orientation;
 import com.vaubrun.model.landscape.Land;
 import com.vaubrun.model.landscape.LandType;
-import com.vaubrun.utils.ExpectedResults;
+import com.vaubrun.utils.ExpectedResultsAndMocks;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,7 +23,7 @@ import java.util.List;
 
 class GameBoardFactoryTest {
     private Path inputFile = Paths.get("src", "test", "resources", "simple_map.txt");
-    private Land[][] expectedLand = ExpectedResults.getSimpleMap();
+    private Land[][] expectedLand = ExpectedResultsAndMocks.getSimpleMap();
 
 
     @DisplayName("Should parse input and create the game map with right dimensions")
