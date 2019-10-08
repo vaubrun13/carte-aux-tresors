@@ -17,6 +17,7 @@ public class App {
     public static void main(String[] args) throws MissingParameterException, BadApplicationParameterException,
             IOException, MapCreationException, BadTreasureCountParameter, InvalidPositionException,
             BadPositionParameterException, InputFileFormatException {
+        log.info("====Validation parameters====");
         if (args.length < 2) {
             throw new MissingParameterException("Parameters for input and/or output files are missing, expecting 2 parameters");
         }
@@ -30,14 +31,18 @@ public class App {
         if (outputFile.exists()) {
             throw new BadApplicationParameterException(MessageFormat.format("Output file already exists: {0}", outputFile.getAbsolutePath()));
         }
+        log.info("====Parameters ok====");
+        log.info("====Generating objects====");
         List<String> descriptors = Files.readAllLines(inputFile.toPath(), Charset.defaultCharset());
         GameBoard gameBoard = GameBoardFactory.generateBoardFromFile(descriptors);
 
+        log.info("====Starting simulation====");
         gameBoard.makeAdventurerMove();
 
+        log.info("====Writing output====");
         List<String> outputs = gameBoard.generateOutput();
         Files.write(outputFile.toPath(), outputs, Charset.defaultCharset());
 
-        log.info("Running");
+        log.info("Finished");
     }
 }

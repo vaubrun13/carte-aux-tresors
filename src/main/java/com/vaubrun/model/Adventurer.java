@@ -143,6 +143,11 @@ public class Adventurer {
         }
     }
 
+    /**
+     * Generate the string that should be saved in output file
+     *
+     * @return
+     */
     public String generateOutput() {
         return MessageFormat.format("{0} - {1} - {2} - {3} - {4} - {5}", ObjectSeparator.ADVENTURER.getValue(), this.getName(),
                 this.getX(), this.getY(), this.getOrientation().getValue(), this.getCollectedTreasures());

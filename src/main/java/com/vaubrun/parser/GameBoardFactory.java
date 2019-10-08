@@ -92,8 +92,8 @@ public abstract class GameBoardFactory {
                     for (char move : movements) {
                         moves.add(Movement.fromValue(String.valueOf(move)));
                     }
-
                     adventurer.setMoves(moves);
+
                     //Set the land on which the adventurer is as occupied
                     gameBoard.getMap()[y][x].setAdventurer(adventurer);
                     gameBoard.getAdventurers().add(adventurer);
@@ -102,8 +102,6 @@ public abstract class GameBoardFactory {
                     break;
             }
         }
-
-
         return gameBoard;
     }
 
