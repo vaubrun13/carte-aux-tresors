@@ -1,7 +1,10 @@
 package com.vaubrun.model;
 
 import com.vaubrun.exception.BadMoveException;
+import com.vaubrun.exception.CannotClimbMountainException;
 import com.vaubrun.model.landscape.Land;
+import com.vaubrun.model.landscape.Mountain;
+import com.vaubrun.utils.ExpectedResults;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,10 +46,10 @@ class AdventurerTest {
 
     @DisplayName("Should move forward")
     @Test
-    void shouldMoveForward() throws BadMoveException {
+    void shouldMoveForward() throws BadMoveException, CannotClimbMountainException {
         //Given
         Adventurer adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.WEST);
-        Land[][] map = new Land[3][4];
+        Land[][] map = ExpectedResults.getSimpleMap();
         //When
         adventurer.moveForward(map);
         //Then
@@ -80,13 +83,26 @@ class AdventurerTest {
         //Given
         Adventurer adventurer = new Adventurer("jack sparrow", 0, 1, Orientation.WEST);
         Land[][] map = new Land[3][4];
-        //When
-
         //Then
         Assertions.assertThrows(BadMoveException.class, () -> {
             adventurer.moveForward(map);
         });
         Assertions.assertEquals(0, adventurer.getX());
+    }
+
+    @DisplayName("Should not move onto a mountain")
+    @Test
+    void shouldNotMoveOnMountains() throws BadMoveException {
+        //Given
+        Adventurer adventurer = new Adventurer("jack sparrow", 1, 2, Orientation.EAST);
+        Land[][] map = new Land[3][4];
+        map[2][2] = new Mountain();
+        //Then
+        Assertions.assertThrows(CannotClimbMountainException.class, () -> {
+            adventurer.moveForward(map);
+        });
+        Assertions.assertEquals(1, adventurer.getX());
+        Assertions.assertEquals(2, adventurer.getY());
     }
 
 }

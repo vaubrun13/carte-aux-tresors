@@ -1,10 +1,14 @@
 package com.vaubrun.model;
 
 import com.vaubrun.exception.BadMoveException;
+import com.vaubrun.exception.CannotClimbMountainException;
 import com.vaubrun.model.landscape.Land;
+import com.vaubrun.model.landscape.LandType;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
+
+import java.text.MessageFormat;
 
 @Data
 public class Adventurer {
@@ -62,24 +66,36 @@ public class Adventurer {
         this.collectedTreasures++;
     }
 
-    public void moveForward(Land[][] map) throws BadMoveException {
+    public void moveForward(Land[][] map) throws BadMoveException, CannotClimbMountainException {
+        int nextX = this.x;
+        int nextY = this.y;
+        //Moving the adventurer
         switch (this.getOrientation()) {
             case NORTH:
                 if (this.y == 0) throw new BadMoveException("Forbidden movement");
-                this.y--;
+                nextY--;
                 break;
             case EAST:
                 if (this.x == map[0].length - 1) throw new BadMoveException("Forbidden movement");
-                this.x++;
+                nextX++;
                 break;
             case SOUTH:
                 if (this.y == map.length - 1) throw new BadMoveException("Forbidden movement");
-                this.y++;
+                nextY++;
                 break;
             case WEST:
                 if (this.x == 0) throw new BadMoveException("Forbidden movement");
-                this.x--;
+                nextX--;
                 break;
         }
+
+        //Checking next position
+        if (map[nextY][nextX].getType().equals(LandType.MOUNTAIN)) {
+            throw new CannotClimbMountainException(MessageFormat.format("Adventurer {0} could not move forward onto a mountain", this.getName()));
+        } else {
+            this.setX(nextX);
+            this.setY(nextY);
+        }
+
     }
 }
