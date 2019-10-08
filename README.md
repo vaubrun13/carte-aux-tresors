@@ -19,3 +19,8 @@ parameter 2: input file with the map description, will be created and should not
 java com.vaubrun.App path/to/inputFile path/for/outputFile 
 java -jar carte-aux-tresors-*-jar-with-dependencies.jar path/to/inputFile path/for/outputFile 
 ```
+
+## Notes
+
+JUnit 5 support seems to be still young. To understand set up please see 
+[this](https://www.mkyong.com/junit5/junit-5-maven-examples/) & [this](https://stackoverflow.com/a/17671104) 
