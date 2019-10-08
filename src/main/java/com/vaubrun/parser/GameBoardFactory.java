@@ -3,6 +3,7 @@ package com.vaubrun.parser;
 import com.vaubrun.exception.*;
 import com.vaubrun.model.Adventurer;
 import com.vaubrun.model.GameBoard;
+import com.vaubrun.model.Movement;
 import com.vaubrun.model.Orientation;
 import com.vaubrun.model.landscape.Land;
 import com.vaubrun.model.landscape.Meadow;
@@ -11,6 +12,7 @@ import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,11 +28,11 @@ public abstract class GameBoardFactory {
      *
      * @param gameDescriptor String list describing the map and the objects on it
      * @return the game board described
-     * @throws MapCreationException      Failed to initiate the map because of bad parameters in descriptor
-     * @throws InputFileFormatException  the map cannot be initiated as required information is missing from descriptor
-     * @throws BadPositionParameterException      one of the object to be put onto the map has a position that is not a valid number
-     * @throws InvalidPositionException           one of the object to be put onto the map has a position that is not, ex: -2
-     * @throws BadTreasureCountParameter a land has a treasure count that is not a valid number
+     * @throws MapCreationException          Failed to initiate the map because of bad parameters in descriptor
+     * @throws InputFileFormatException      the map cannot be initiated as required information is missing from descriptor
+     * @throws BadPositionParameterException one of the object to be put onto the map has a position that is not a valid number
+     * @throws InvalidPositionException      one of the object to be put onto the map has a position that is not, ex: -2
+     * @throws BadTreasureCountParameter     a land has a treasure count that is not a valid number
      */
     public static GameBoard generateBoardFromFile(List<String> gameDescriptor)
             throws MapCreationException, InputFileFormatException, BadPositionParameterException, BadTreasureCountParameter, InvalidPositionException {
@@ -84,7 +86,14 @@ public abstract class GameBoardFactory {
                 case ADVENTURER:
                     Orientation orientation = Orientation.fromValue(objectInformation[4].trim());
                     Adventurer adventurer = new Adventurer(objectInformation[1].trim(), x, y, orientation);
-                    adventurer.setMoves(objectInformation[5].trim());
+
+                    char[] movements = objectInformation[5].trim().toCharArray();
+                    List<Movement> moves = new ArrayList<>();
+                    for (char move : movements) {
+                        moves.add(Movement.fromValue(String.valueOf(move)));
+                    }
+
+                    adventurer.setMoves(moves);
                     gameBoard.getAdventurers().add(adventurer);
                     break;
                 default:

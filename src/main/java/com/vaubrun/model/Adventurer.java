@@ -9,6 +9,8 @@ import lombok.Data;
 import lombok.Setter;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class Adventurer {
@@ -18,7 +20,7 @@ public class Adventurer {
     private Orientation orientation;
     @Setter(value = AccessLevel.PRIVATE)
     private int collectedTreasures;
-    private String moves;
+    private List<Movement> moves;
 
     public Adventurer(String name, int x, int y, Orientation orientation) {
         this.name = name;
@@ -26,6 +28,7 @@ public class Adventurer {
         this.y = y;
         this.orientation = orientation;
         this.collectedTreasures = 0;
+        this.moves = new ArrayList<>();
     }
 
     public void turnLeft() {

@@ -3,6 +3,7 @@ package com.vaubrun.parser;
 import com.vaubrun.exception.*;
 import com.vaubrun.model.Adventurer;
 import com.vaubrun.model.GameBoard;
+import com.vaubrun.model.Movement;
 import com.vaubrun.model.Orientation;
 import com.vaubrun.model.landscape.Land;
 import com.vaubrun.model.landscape.LandType;
@@ -83,18 +84,6 @@ class GameBoardFactoryTest {
         Assertions.assertEquals(1, board.getMap()[3][1].getTreasures());
     }
 
-    @DisplayName("Should parse input and put adventurers on map")
-    @Test
-    public void shouldCreateAdventurers() throws MapCreationException, IOException, InputFileFormatException, BadTreasureCountParameter, BadPositionParameterException, InvalidPositionException {
-        //Given
-        List<String> allLines = Files.readAllLines(inputFile);
-        //When
-        GameBoard board = GameBoardFactory.generateBoardFromFile(allLines);
-        //Then
-        Assertions.assertEquals(2, board.getMap()[3][0].getTreasures());
-        Assertions.assertEquals(1, board.getMap()[3][1].getTreasures());
-    }
-
     @DisplayName("Should reject parameter as not a valid number")
     @Test
     void shouldRejectNotStringPosition() {
@@ -135,11 +124,14 @@ class GameBoardFactoryTest {
     void shouldAddAdventurer() throws MapCreationException, InvalidPositionException, BadTreasureCountParameter,
             BadPositionParameterException, InputFileFormatException {
         Adventurer expectedAdventurer = new Adventurer("wilson", 1, 0, Orientation.SOUTH);
-        expectedAdventurer.setMoves("A");
+        List<Movement> expectedMoves = new ArrayList<>();
+        expectedMoves.add(Movement.MOVE_FORWARD);
+        expectedMoves.add(Movement.TURN_RIGHT);
+        expectedAdventurer.setMoves(expectedMoves);
         //Given
         List<String> description = new ArrayList<>();
         description.add("C - 2 - 2");
-        description.add("A - wilson - 1 - 0 - S - A");
+        description.add("A - wilson - 1 - 0 - S - AD");
         //When
         GameBoard gameBoard = GameBoardFactory.generateBoardFromFile(description);
         //Then
