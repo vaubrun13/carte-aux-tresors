@@ -78,7 +78,6 @@ public abstract class GameBoardFactory {
                     try {
                         gameBoard.getMap()[y][x].setTreasures(Integer.parseInt(objectInformation[3].trim()));
                     } catch (NumberFormatException e) {
-                        log.error(MessageFormat.format("Invalid treasure count: {0}", objectInformation[3]), e);
                         throw new BadTreasureCountParameter(MessageFormat.format("Invalid treasure count: {0}", objectInformation[3]), e);
                     }
                     break;
@@ -111,7 +110,6 @@ public abstract class GameBoardFactory {
         try {
             position = Integer.parseInt(positionString.trim());
         } catch (NumberFormatException e) {
-            log.error(MessageFormat.format("position for {0} is invalid: {1}", describedObject.getValue(), positionString), e);
             throw new BadPositionParameterException(MessageFormat.format("position for {0} is invalid: {1}", describedObject.getValue(), positionString), e);
         }
         if (position < 0) {
@@ -134,15 +132,13 @@ public abstract class GameBoardFactory {
         try {
             x = Integer.parseInt(info[1].trim());
         } catch (NumberFormatException e) {
-            log.error(MessageFormat.format("x size of the map is invalid: {0}", info[1]));
-            throw new MapCreationException(MessageFormat.format("x size of the map is invalid: {0}", info[1]));
+            throw new MapCreationException(MessageFormat.format("x size of the map is invalid: {0}", info[1]), e);
         }
 
         try {
             y = Integer.parseInt(info[2].trim());
         } catch (NumberFormatException e) {
-            log.error(MessageFormat.format("y size of the map is invalid: {0}", info[2]));
-            throw new MapCreationException(MessageFormat.format("y size of the map is invalid: {0}", info[2]));
+            throw new MapCreationException(MessageFormat.format("y size of the map is invalid: {0}", info[2]), e);
         }
         //Creating the map
         Land[][] land = new Land[y][x];
