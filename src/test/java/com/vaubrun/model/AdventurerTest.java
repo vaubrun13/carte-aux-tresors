@@ -2,6 +2,7 @@ package com.vaubrun.model;
 
 import com.vaubrun.exception.BadMoveException;
 import com.vaubrun.exception.CannotClimbMountainException;
+import com.vaubrun.exception.LandAlreadyOccupiedException;
 import com.vaubrun.model.landscape.Land;
 import com.vaubrun.model.landscape.Mountain;
 import com.vaubrun.utils.ExpectedResultsAndMocks;
@@ -88,7 +89,7 @@ class AdventurerTest {
 
     @DisplayName("Should move forward")
     @Test
-    void shouldMoveForward() throws BadMoveException, CannotClimbMountainException {
+    void shouldMoveForward() throws BadMoveException, CannotClimbMountainException, LandAlreadyOccupiedException {
         //Given
         Adventurer adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.WEST);
         Land[][] map = ExpectedResultsAndMocks.getSimpleMap();
@@ -149,7 +150,7 @@ class AdventurerTest {
 
     @DisplayName("Should move according to desired movement")
     @Test
-    void shouldMove() throws BadMoveException, CannotClimbMountainException {
+    void shouldMove() throws BadMoveException, CannotClimbMountainException, LandAlreadyOccupiedException {
         //Given
         Adventurer adventurer = new Adventurer("jack sparrow", 1, 2, Orientation.EAST);
         Land[][] map = ExpectedResultsAndMocks.mockForMove();
@@ -172,6 +173,57 @@ class AdventurerTest {
         //Then
         Assertions.assertEquals(1, adventurer.getX());
         Assertions.assertEquals(1, adventurer.getY());
+    }
+
+    @DisplayName("Should not move if other adventurer on land")
+    @Test
+    void shouldNotMoveOnOccupiedLand() throws BadMoveException, CannotClimbMountainException {
+        //Given
+        Land[][] map = ExpectedResultsAndMocks.getSimpleMap();
+        Adventurer jack = new Adventurer("jack sparrow", 1, 0, Orientation.WEST);
+        Adventurer lara = new Adventurer("lara croft", 0, 0, Orientation.SOUTH);
+        map[jack.getY()][jack.getX()].setAdventurer(jack);
+        map[lara.getY()][lara.getX()].setAdventurer(lara);
+        //Then
+        Assertions.assertThrows(LandAlreadyOccupiedException.class, () -> {
+            jack.move(Movement.MOVE_FORWARD, map);
+        });
+
+
+    }
+
+    @DisplayName("Should leave land when moving")
+    @Test
+    void shouldLeaveLand() throws BadMoveException, CannotClimbMountainException, LandAlreadyOccupiedException {
+        //Given
+        Land[][] map = ExpectedResultsAndMocks.getSimpleMap();
+        Adventurer jack = new Adventurer("jack sparrow", 1, 0, Orientation.EAST);
+        Adventurer lara = new Adventurer("lara croft", 0, 0, Orientation.SOUTH);
+        map[jack.getY()][jack.getX()].setAdventurer(jack);
+        map[lara.getY()][lara.getX()].setAdventurer(lara);
+        //When
+        jack.move(Movement.MOVE_FORWARD, map);
+        //Then
+        Assertions.assertNull(map[0][1].getAdventurer());
+
+
+    }
+
+    @DisplayName("Should occupy land when moving")
+    @Test
+    void shouldOccupyLand() throws BadMoveException, CannotClimbMountainException, LandAlreadyOccupiedException {
+        //Given
+        Land[][] map = ExpectedResultsAndMocks.getSimpleMap();
+        Adventurer jack = new Adventurer("jack sparrow", 1, 0, Orientation.EAST);
+        Adventurer lara = new Adventurer("lara croft", 0, 0, Orientation.SOUTH);
+        map[jack.getY()][jack.getX()].setAdventurer(jack);
+        map[lara.getY()][lara.getX()].setAdventurer(lara);
+        //When
+        jack.move(Movement.MOVE_FORWARD, map);
+        //Then
+        Assertions.assertEquals(jack, map[jack.getY()][jack.getX()].getAdventurer());
+
+
     }
 
 }

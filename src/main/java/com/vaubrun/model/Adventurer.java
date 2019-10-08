@@ -2,6 +2,7 @@ package com.vaubrun.model;
 
 import com.vaubrun.exception.BadMoveException;
 import com.vaubrun.exception.CannotClimbMountainException;
+import com.vaubrun.exception.LandAlreadyOccupiedException;
 import com.vaubrun.model.landscape.Land;
 import com.vaubrun.model.landscape.LandType;
 import com.vaubrun.parser.ObjectSeparator;
@@ -77,7 +78,7 @@ public class Adventurer {
      * @throws BadMoveException             the new position is out of the map bounds
      * @throws CannotClimbMountainException the new position is onto a mountain
      */
-    public void moveForward(Land[][] map) throws BadMoveException, CannotClimbMountainException {
+    public void moveForward(Land[][] map) throws BadMoveException, CannotClimbMountainException, LandAlreadyOccupiedException {
         int nextX = this.x;
         int nextY = this.y;
         //Moving the adventurer
@@ -103,9 +104,13 @@ public class Adventurer {
         //Checking next position
         if (map[nextY][nextX].getType().equals(LandType.MOUNTAIN)) {
             throw new CannotClimbMountainException(MessageFormat.format("Adventurer {0} could not move forward onto a mountain", this.getName()));
+        } else if (map[nextY][nextX].getAdventurer() != null) {
+            throw new LandAlreadyOccupiedException(MessageFormat.format("Adventurer {0} could not move forward as land is already occupied", this.getName()));
         } else {
+            map[y][x].setAdventurer(null);
             this.setX(nextX);
             this.setY(nextY);
+            map[y][x].setAdventurer(this);
         }
 
     }
@@ -117,8 +122,10 @@ public class Adventurer {
      * @param map
      * @throws BadMoveException             when moving forward and the new position is out of the map bounds
      * @throws CannotClimbMountainException when moving forward and the new position is onto a mountain
+     * @throws LandAlreadyOccupiedException when moving forward and the new position is already occupied by another adventurer
      */
-    public void move(Movement movement, Land[][] map) throws BadMoveException, CannotClimbMountainException {
+    public void move(Movement movement, Land[][] map)
+            throws BadMoveException, CannotClimbMountainException, LandAlreadyOccupiedException {
         switch (movement) {
             case TURN_RIGHT:
                 this.turnRight();

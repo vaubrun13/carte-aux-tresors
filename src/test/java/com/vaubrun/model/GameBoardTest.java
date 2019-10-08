@@ -13,7 +13,7 @@ class GameBoardTest {
     @DisplayName("Should generate proper output")
     @Test
     void generateOutput() {
-        //Give,
+        //Given
         Land[][] map = ExpectedResultsAndMocks.getSimpleMap();
 
         Adventurer jack = new Adventurer("jack sparrow", 1, 2, Orientation.EAST);
