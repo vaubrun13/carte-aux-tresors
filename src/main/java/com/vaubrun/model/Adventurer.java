@@ -69,6 +69,13 @@ public class Adventurer {
         this.collectedTreasures++;
     }
 
+    /**
+     * Make the adventurer move forward on the map
+     *
+     * @param map
+     * @throws BadMoveException             the new position is out of the map bounds
+     * @throws CannotClimbMountainException the new position is onto a mountain
+     */
     public void moveForward(Land[][] map) throws BadMoveException, CannotClimbMountainException {
         int nextX = this.x;
         int nextY = this.y;
@@ -100,5 +107,25 @@ public class Adventurer {
             this.setY(nextY);
         }
 
+    }
+
+    /**
+     * Move adventurer based on chosen move
+     *
+     * @param movement
+     * @param map
+     * @throws BadMoveException             when moving forward and the new position is out of the map bounds
+     * @throws CannotClimbMountainException when moving forward and the new position is onto a mountain
+     */
+    public void move(Movement movement, Land[][] map) throws BadMoveException, CannotClimbMountainException {
+        switch (movement) {
+            case TURN_RIGHT:
+                this.turnRight();
+                break;
+            case TURN_LEFT:
+                this.turnLeft();
+            case MOVE_FORWARD:
+                this.moveForward(map);
+        }
     }
 }

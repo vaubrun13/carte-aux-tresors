@@ -147,4 +147,31 @@ class AdventurerTest {
         Assertions.assertEquals(2, adventurer.getY());
     }
 
+    @DisplayName("Should move according to desired movement")
+    @Test
+    void shouldMove() throws BadMoveException, CannotClimbMountainException {
+        //Given
+        Adventurer adventurer = new Adventurer("jack sparrow", 1, 2, Orientation.EAST);
+        Land[][] map = ExpectedResults.mockForMove();
+        //When
+        adventurer.move(Movement.TURN_RIGHT, map);
+        //Then
+        Assertions.assertEquals(Orientation.SOUTH, adventurer.getOrientation());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 2, Orientation.NORTH);
+        //When
+        adventurer.move(Movement.TURN_LEFT, map);
+        //Then
+        Assertions.assertEquals(Orientation.WEST, adventurer.getOrientation());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 2, Orientation.NORTH);
+        //When
+        adventurer.move(Movement.MOVE_FORWARD, map);
+        //Then
+        Assertions.assertEquals(1, adventurer.getX());
+        Assertions.assertEquals(1, adventurer.getY());
+    }
+
 }

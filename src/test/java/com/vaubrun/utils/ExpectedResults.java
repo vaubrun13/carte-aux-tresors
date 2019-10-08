@@ -15,4 +15,13 @@ public abstract class ExpectedResults {
 
         return land;
     }
+
+    public static Land[][] mockForMove() {
+        Land[][] land = new Land[3][4];
+        land[0] = new Land[]{new Mountain(), new Meadow(0), new Meadow(0)};
+        land[1] = new Land[]{new Meadow(0), new Meadow(0), new Meadow(0), new Meadow(0)};
+        land[2] = new Land[]{new Meadow(0), new Meadow(0), new Mountain(), new Meadow(0)};
+
+        return land;
+    }
 }
