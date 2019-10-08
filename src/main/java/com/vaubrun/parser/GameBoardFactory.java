@@ -94,6 +94,8 @@ public abstract class GameBoardFactory {
                     }
 
                     adventurer.setMoves(moves);
+                    //Set the land on which the adventurer is as occupied
+                    gameBoard.getMap()[y][x].setAdventurer(adventurer);
                     gameBoard.getAdventurers().add(adventurer);
                     break;
                 default:

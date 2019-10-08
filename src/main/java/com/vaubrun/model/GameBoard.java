@@ -38,11 +38,11 @@ public class GameBoard {
                     try {
                         adventurer.move(adventurer.getMoves().get(i), this.getMap());
                     } catch (BadMoveException e) {
-                        log.error(MessageFormat.format("Adventurer{0} could not move as it will bring him out of bounds", adventurer.getName()), e);
+                        log.error(MessageFormat.format("Adventurer {0} could not move as it will bring him out of bounds", adventurer.getName()), e);
                     } catch (CannotClimbMountainException e) {
-                        log.error(MessageFormat.format("Adventurer{0} could not move as it cannot clim mountains", adventurer.getName()), e);
+                        log.error(MessageFormat.format("Adventurer {0} could not move as it cannot clim mountains", adventurer.getName()), e);
                     } catch (LandAlreadyOccupiedException e) {
-                        log.error(MessageFormat.format("Adventurer{0} could not move as the land is already occupied", adventurer.getName()), e);
+                        log.error(MessageFormat.format("Adventurer {0} could not move as the land is already occupied", adventurer.getName()), e);
                     }
                 }
             }

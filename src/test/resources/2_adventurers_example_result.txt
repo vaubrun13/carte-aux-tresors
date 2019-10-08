@@ -1,0 +1,7 @@
+C - 3 - 4
+M - 0 - 2
+# {T comme Trésor} - {Axe horizontal} - {Axe vertical} - {Nb. de trésors restants}
+T - 0 - 1 - 2
+# {A comme Aventurier} - {Nom de l’aventurier} - {Axe horizontal} - {Axe vertical} - {Orientation} - {Nb. trésors ramassés}
+A - Indiana - 1 - 2 - N - 0
+A - Benjamin - 0 - 0 - S - 0
