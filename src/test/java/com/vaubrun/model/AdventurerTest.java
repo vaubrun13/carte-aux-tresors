@@ -10,7 +10,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 class AdventurerTest {
-    @DisplayName("Should turn left in right direction")
+    @DisplayName("Should turn left")
     @Test
     void shouldTurnLeft() {
         //Given
@@ -19,9 +19,30 @@ class AdventurerTest {
         adventurer.turnLeft();
         //Then
         Assertions.assertEquals(Orientation.NORTH, adventurer.getOrientation());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.NORTH);
+        //When
+        adventurer.turnLeft();
+        //Then
+        Assertions.assertEquals(Orientation.WEST, adventurer.getOrientation());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.WEST);
+        //When
+        adventurer.turnLeft();
+        //Then
+        Assertions.assertEquals(Orientation.SOUTH, adventurer.getOrientation());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.SOUTH);
+        //When
+        adventurer.turnLeft();
+        //Then
+        Assertions.assertEquals(Orientation.EAST, adventurer.getOrientation());
     }
 
-    @DisplayName("Should turn right in right direction")
+    @DisplayName("Should turn right")
     @Test
     void shouldTurnRight() {
         //Given
@@ -30,6 +51,27 @@ class AdventurerTest {
         adventurer.turnRight();
         //Then
         Assertions.assertEquals(Orientation.NORTH, adventurer.getOrientation());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.NORTH);
+        //When
+        adventurer.turnRight();
+        //Then
+        Assertions.assertEquals(Orientation.EAST, adventurer.getOrientation());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.EAST);
+        //When
+        adventurer.turnRight();
+        //Then
+        Assertions.assertEquals(Orientation.SOUTH, adventurer.getOrientation());
+
+        //Given
+        adventurer = new Adventurer("jack sparrow", 1, 1, Orientation.SOUTH);
+        //When
+        adventurer.turnRight();
+        //Then
+        Assertions.assertEquals(Orientation.WEST, adventurer.getOrientation());
     }
 
     @DisplayName("Should increase treasure count when collecting treasures")
