@@ -125,8 +125,10 @@ public class Adventurer {
                 break;
             case TURN_LEFT:
                 this.turnLeft();
+                break;
             case MOVE_FORWARD:
                 this.moveForward(map);
+                break;
         }
     }
 
