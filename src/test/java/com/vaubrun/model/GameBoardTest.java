@@ -55,4 +55,20 @@ class GameBoardTest {
         List<String> expectedResult = Files.readAllLines(resultFile, Charset.defaultCharset());
         Assertions.assertEquals(expectedResult, out);
     }
+
+    @DisplayName("Should play scenario of adventurer getting stuck")
+    @Test
+    void shouldPlayScenarioStuckAdventurer() throws IOException, MapCreationException, BadTreasureCountParameter, InvalidPositionException, BadPositionParameterException, InputFileFormatException {
+        //Given
+        Path inputFile = Paths.get("src", "test", "resources", "adventurer_stuck_example.txt");
+        List<String> allLines = Files.readAllLines(inputFile, Charset.defaultCharset());
+        GameBoard gameBoard = GameBoardFactory.generateBoardFromFile(allLines);
+        //When
+        gameBoard.makeAdventurerMove();
+        List<String> out = gameBoard.generateOutput();
+        //Then
+        Path resultFile = Paths.get("src", "test", "resources", "adventurer_stuck_example_result.txt");
+        List<String> expectedResult = Files.readAllLines(resultFile, Charset.defaultCharset());
+        Assertions.assertEquals(expectedResult, out);
+    }
 }
