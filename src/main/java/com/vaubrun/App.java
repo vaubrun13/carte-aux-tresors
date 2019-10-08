@@ -35,6 +35,8 @@ public class App {
 
         gameBoard.makeAdventurerMove();
 
+        List<String> outputs = gameBoard.generateOutput();
+        Files.write(outputFile.toPath(), outputs, Charset.defaultCharset());
 
         log.info("Running");
     }
